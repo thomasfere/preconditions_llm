@@ -1,12 +1,12 @@
 
 import requests
-import json
 import PyPDF2
-import openai
 import os
 from openai import OpenAI
 
 
+# download a test PDF from ET to test
+# todo - extract specific dataset
 def extract_data_from_PDF():
     file = "/Users/thomasferentinos/Downloads/FEK-2013-Tefxos A-00170-downloaded -11_12_2023.pdf"
 
@@ -20,7 +20,8 @@ def extract_data_from_PDF():
     return text
 
 
-
+# use the mitos api to extract a law-order in json format
+# todo - extract specific dataset
 def extract_data_from_api():
 
     response = requests.get('https://api.digigov.grnet.gr/v1/services/937099');
@@ -39,12 +40,13 @@ def extract_data_from_api():
 
 
 
-
 def call_llm(data):
     os.environ['OPENAI_API_KEY'] = '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'
     client = OpenAI()
     prompt = f"list the preconditions from text {data} "
 
+
+    # make the request to LLM
     completion = client.completions.create(
         model="gpt-3.5-turbo-instruct",
         prompt=prompt,
@@ -57,6 +59,7 @@ def call_llm(data):
 
 def main():
 
+    # current API billing plan doesn't support this atm
     #data = extract_data_from_PDF()
 
     data = extract_data_from_api()
@@ -67,3 +70,4 @@ def main():
 
 
 main()
+
